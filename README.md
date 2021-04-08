@@ -49,7 +49,7 @@ Since the dataset is labeled, it is suitable for supervised learning machine lea
 * Naive Bayes Classifier
 
 The metric that will be used to evaluate the classifier include: mis-classification rate/accuracy, precision/recall, and the ROC curve. These metrics will give us an indication of the predictive power of the underlying model built at predicting whether a suspect will be frisked or searched. The model will use the all of the data except for the last year (2013) to train and test on the 2013 dataset.
-Performance metrics such as the model's run time and computational resources require to train model, as well as scalability(for example if deployed in a brand new city), should be considered.
+Performance metrics such as the model's run time and computational resources require to train model, as well as scalability (for example if deployed in a brand new city) should also be considered.
 
 #### Business Metrics
 
