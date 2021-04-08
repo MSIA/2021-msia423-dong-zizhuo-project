@@ -1,4 +1,62 @@
-# MSiA423 Template Repository
+# MSiA423 Project
+
+Author: Xavier Dong
+
+QA: Wenyang Pan
+
+## Project Charter 
+
+#### Background 
+
+In the US, police brutality and systemic racism is very a serious social issue.
+
+I believe this issue can potentially benefit from further research to discover more insights through a a data-driven modeling approach on histoical data collected in practical real-world scenarios.
+
+#### Vision
+
+The New York City Stop and Frisk Program allows officers with NYPD to Stop, Question, Frisk, and Search civilians in public. This program has garnished a significant amount of attention due to its questionable constitutionality and effectiveness. Statistical studies indicate an imbalance on who the Stop and Frisk Program was applied to most. Moreover, there is little to no evidence that the program was effective at all in deterring crime. 
+
+The goal of the project is to utilize historical data on NYC's search and frisk program to build a tool that can accurately classify someone's likelihood of being searched or frisked.
+
+This could be useful to many people such as:
+* Lawyer/Policy Maker (criminal defense and justice system reform)
+* Police Officer (resource/budget distribution)
+* Social Activist (policy change, socialogy application)
+* Regular Citizens (when and where to avoid, and chances of confronted by police)
+* Criminals? (How to avoid the police confrontation after committing a crime)
+
+#### Mission
+Because of the issues mentioned above, we would like to build a classifier app that can predict whether or not a person will be frisked/searched given certain feature of that person.
+In this app, the user will have the option to input features such as the ones list below:
+
+* age, sex, height, race
+* location
+* time of day
+* crime suspected
+* drug/weapon involved
+* physical force
+
+The datasets we chose are from the Engima database and contain details and statistics for New York City Police Department’s Stop, Question and Frisk program for 2003-2012. Features include the time, date of stop, offense, suspect description, the reason for stop/arrest, whether there were a weapon, contraband and other additional circumstances related to the stop. In total, we have around 3.4 million records with 115 features in the raw data.
+While this is a large dataset, the dataset is very sparse (a lot of missing features), so a lot of records will be excluded after data preprocessing and feature selection. Aggregations of certain group hierarchy within the will also be performed to reduce the size of the dataset.
+
+#### Success Criteria
+
+#### Machine Learning Metrics
+
+Since the dataset is labeled, it is suitable for supervised learning machine learning methods, the following models are scheduled to be fitted:
+* Random Forest Classifier
+* Logistic Regression
+* Naive Bayes Classifier
+
+The metric that will be used to evaluate the classifier include: mis-classification rate/accuracy, precision/recall, and the ROC curve. These metrics will give us an indication of the predictive power of the underlying model built at predicting whether a suspect will be frisked or searched. The model will use the all of the data except for the last year (2013) to train and test on the 2013 dataset.
+
+
+#### Business Metrics
+
+From a business perspective, a successful deployment of this tool can expose any underlying bias in the current policing system and provide evidence to set the stage for progressive social movement/changes, as well as guiding policy changes in the police system.
+We can potentially quantify the effective of the app in this aspect by collecting data on the demographics of users and how the app suit their intended purposes 
+Their frequency of use and feedbacks on how they use the app to help them do their job can be consulted for whether the app is successful from a business perspective
+
 
 <!-- toc -->
 
