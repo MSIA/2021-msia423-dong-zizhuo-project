@@ -8,9 +8,9 @@ QA: Wenyang Pan
 
 #### Background 
 
-In the US, police brutality and systemic racism is very a serious social issue.
+In the US, police brutality and systemic racism is a very serious social issue.
 
-I believe this issue can potentially benefit from further research to discover more insights through a a data-driven modeling approach on histoical data collected in practical real-world scenarios.
+I believe this issue can potentially benefit from further research to discover more insights through a data-driven modeling approach on historical data collected in practical real-world scenarios.
 
 #### Vision
 
@@ -21,12 +21,12 @@ The goal of the project is to utilize historical data on NYC's search and frisk 
 This could be useful to many people such as:
 * Lawyer/Policy Maker (criminal defense and justice system reform)
 * Police Officer (resource/budget distribution)
-* Social Activist (policy change, socialogy application)
+* Social Activist (policy change, sociology application)
 * Regular Citizens (when and where to avoid, and chances of confronted by police)
 * Criminals? (How to avoid the police confrontation after committing a crime)
 
 #### Mission
-Because of the issues mentioned above, we would like to build a classifier app that can predict whether or not a person will be frisked/searched given certain feature of that person.
+Because of the issues mentioned above, we would like to build a classifier app that can predict whether or not a person will be frisked/searched given certain features of that person.
 In this app, the user will have the option to input features such as the ones list below:
 
 * age, sex, height, race
@@ -35,6 +35,8 @@ In this app, the user will have the option to input features such as the ones li
 * crime suspected
 * drug/weapon involved
 * physical force
+
+The output will be the probability of being searched or frisked given the features that the user input, it will also provide visualization to show the most influencing features that model used to determine the probabilities.
 
 The datasets we chose are from the Engima database and contain details and statistics for New York City Police Department’s Stop, Question and Frisk program for 2003-2012. Features include the time, date of stop, offense, suspect description, the reason for stop/arrest, whether there were a weapon, contraband and other additional circumstances related to the stop. In total, we have around 3.4 million records with 115 features in the raw data.
 While this is a large dataset, the dataset is very sparse (a lot of missing features), so a lot of records will be excluded after data preprocessing and feature selection. Aggregations of certain group hierarchy within the will also be performed to reduce the size of the dataset.
@@ -47,14 +49,15 @@ Since the dataset is labeled, it is suitable for supervised learning machine lea
 * Random Forest Classifier
 * Logistic Regression
 * Naive Bayes Classifier
+* XGBoost
 
-The metric that will be used to evaluate the classifier include: mis-classification rate/accuracy, precision/recall, and the ROC curve. These metrics will give us an indication of the predictive power of the underlying model built at predicting whether a suspect will be frisked or searched. The model will use the all of the data except for the last year (2013) to train and test on the 2013 dataset. A classification accuracy of 70% is a reasonable goal.
-Performance metrics such as the model's run time and computational resources require to train model, as well as scalability (for example if deployed in a brand new city) should also be considered.
+The metric that will be used to evaluate the classifier include: mis-classification rate/accuracy, precision/recall, and the ROC curve. These metrics will give us an indication of the predictive power of the underlying model built at predicting whether a suspect will be frisked or searched. The model will use all of the data except for the last year (2013) to train and test on the 2013 dataset. A classification accuracy of 70% at predicting search and frisked is a reasonable goal since the majority class (not searched/frisked) is about 60% of the data, this goal will beat guessing the majority by a good margin.
+Performance metrics such as the model's run time and computational resources required to train the model, as well as scalability (for example if deployed in a brand new city) should also be considered.
 
 #### Business Metrics
 
 From a business perspective, a successful deployment of this tool can expose any underlying bias in the current policing system and provide evidence to set the stage for progressive social movement/changes, as well as guiding policy changes in the police system.
-We can potentially quantify the effective of the app in this aspect by collecting data on the demographics of users and how the app suit their intended purposes 
+We can potentially quantify the effectiveness of the app in this aspect by collecting data on the demographics of users and how the app suits their intended purposes 
 Their frequency of use and feedbacks on how they use the app to help them do their job can be consulted for whether the app is successful from a business perspective
 
 
