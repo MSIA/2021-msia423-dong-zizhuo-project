@@ -1,6 +1,6 @@
 # MSiA423 Project
 
-Author: Xavier Dong
+Author: Xavier (Zizhuo) Dong
 
 QA: Wenyang Pan
 
