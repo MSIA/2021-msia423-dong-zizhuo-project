@@ -12,7 +12,7 @@ QA: Wenyang Pan
 
 - Open `src/config.py` and edit `local_data_path` to the path where you want the raw data to be downloaded locally and `s3_data_path` to the path where you want to upload the raw data in s3
  
-- Execute docker command file `run_load_data.sh` and `run_generate_db.sh` to run data pipeline
+- Execute docker command to run data pipeline
 
 ## Project Charter 
 
