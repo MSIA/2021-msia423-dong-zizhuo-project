@@ -9,7 +9,7 @@ import logging
 import argparse
 import yaml
 import re
-import config
+import src.config as config
 data_url = config.data_url
 local_data_path = config.local_data_path
 s3_data_path = config.s3_data_path
@@ -17,7 +17,7 @@ s3_data_path = config.s3_data_path
 logger = logging.getLogger(__name__)
 
 
-def download_data(local_path):
+def download_data(local_path=local_data_path):
     """
     download static, public, data file into python using the request library, and convert to pandas dataframe
 
@@ -50,20 +50,19 @@ def parse_s3(s3path):
     return s3bucket, s3path
 
 
-def upload_file_to_s3(local_path=local_data_path, s3path=s3_data_path):
-    download_data(local_path)
+def upload_file_to_s3(args):
+    download_data(args.local_path)
 
-    s3bucket, s3_just_path = parse_s3(s3path)
+    s3bucket, s3_just_path = parse_s3(args.s3_path)
 
     s3 = boto3.resource("s3")
     bucket = s3.Bucket(s3bucket)
-
     try:
-        bucket.upload_file(local_path, s3_just_path)
+        bucket.upload_file(args.local_path, s3_just_path)
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
-        logger.info('Data uploaded from %s to %s', local_path, s3path)
+        logger.info('Data uploaded from %s to %s', args.local_path, args.s3_path)
 
 
 if __name__ == '__main__':
