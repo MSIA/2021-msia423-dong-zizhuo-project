@@ -4,6 +4,16 @@ Author: Zizhuo (Xavier) Dong
 
 QA: Wenyang Pan
 
+## Instruction to run data pipeline
+- Set your environment variables for AWS in terminal:
+  * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`  
+  * `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>`  
+  * `export BUCKET_NAME=msia423-dong`  
+
+- Open `src/config.py` and edit `local_data_path` to the path where you want the raw data to be downloaded locally and `s3_data_path` to the path where you want to upload the raw data in s3
+ 
+- Execute docker command file `run_load_data.sh` and `run_generate_db.sh` to run data pipeline
+
 ## Project Charter 
 
 #### Background 
@@ -38,7 +48,7 @@ In this app, the user will have the option to input features such as the ones li
 
 The output will be the probability of being searched or frisked given the features that the user input, it will also provide visualization to show the most influencing features that model used to determine the probabilities.
 
-The datasets we chose are from the Engima database and contain details and statistics for New York City Police Department’s Stop, Question and Frisk program for 2003-2012. Features include the time, date of stop, offense, suspect description, the reason for stop/arrest, whether there were a weapon, contraband and other additional circumstances related to the stop. In total, we have around 3.4 million records with 115 features in the raw data.
+The datasets I chose are from the public NYPD stop and frisk report website and contain details and statistics for New York City Police Department’s Stop, Question and Frisk program for 2003-2016. Features include the time, date of stop, offense, suspect description, the reason for stop/arrest, whether there were a weapon, contraband and other additional circumstances related to the stop. In total, we have around 3.4 million records with 115 features in the raw data.
 While this is a large dataset, the dataset is very sparse (a lot of missing features), so a lot of records will be excluded after data preprocessing and feature selection. Aggregations of certain group hierarchy within the will also be performed to reduce the size of the dataset.
 
 #### Success Criteria

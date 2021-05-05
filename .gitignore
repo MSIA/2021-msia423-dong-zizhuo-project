@@ -1,15 +1,14 @@
-__pycache__/
-*.pyc
-*.py[cod]
-*.class
 .DS_Store
+.vscode/
 .idea/
-.log
-.ipynb_checkpoints/
+__pycache__/
+*.egg-info/
+.ipynb_checkpoints
+.env
+.venv
+env/
+venv/
+.mypy_cache/
+config/.mysqlconfig
+config.yml
 
-
-data/*
-!data/sample/
-!data/external/
-config/local
-!.gitkeep
