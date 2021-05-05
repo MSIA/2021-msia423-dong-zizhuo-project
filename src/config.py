@@ -27,3 +27,4 @@ host = os.environ.get("MYSQL_HOST")
 port = os.environ.get("MYSQL_PORT")
 db_name = os.environ.get("DATABASE_NAME")
 engine_string = f"{conn_type}://{user}:{password}@{host}:{port}/{db_name}"
+
