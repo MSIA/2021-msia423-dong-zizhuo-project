@@ -57,6 +57,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Pass in engine string to generate new database.")
     parser.add_argument("--engine_string", default=ENGINE_STRING,
                         help="mysql engine string")
-    arg = parser.parse_args()
+    parser.set_defaults(func=generate_new_db)
+    args = parser.parse_args()
+    args.func(args)
 
-    generate_new_db(ENGINE_STRING)
+    # generate_new_db(ENGINE_STRING)

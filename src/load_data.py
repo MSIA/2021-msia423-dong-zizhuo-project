@@ -89,6 +89,8 @@ if __name__ == '__main__':
                         help="Where to upload data into S3")
     parser.add_argument('--local_path', default=local_data_path,
                         help="Where to find raw data to be uploaded locally")
+    parser.set_defaults(func=upload_file_to_s3)
     args = parser.parse_args()
+    args.func(args)
 
-    upload_file_to_s3(local_data_path, s3_data_path)
+    # upload_file_to_s3(local_data_path, s3_data_path)

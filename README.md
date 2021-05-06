@@ -9,8 +9,9 @@ QA: Wenyang Pan
   * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`  
   * `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>`  
 
-- Open `src/config.py` and edit `LOCAL_DATA_PATH` to the path where you want the raw data to be downloaded locally and `S3_DATA_PATH` to the path where you want to upload the raw data in s3
- 
+- Open `src/config.py`
+  * edit `LOCAL_DATA_PATH` to the path where you want the raw data to be downloaded locally and `S3_DATA_PATH` to the path where you want to upload the raw data in s3
+  * edit RDS Credential section to your own mysql credentials (default to use OS environment variables)
 - Execute docker file to run data pipeline python commands
 
 ## Project Charter 

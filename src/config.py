@@ -1,6 +1,5 @@
 import os
 from os import path
-import logging
 
 # project home path
 PROJECT_HOME = path.dirname(path.abspath(__file__))
