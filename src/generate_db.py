@@ -2,11 +2,12 @@ import os
 import argparse
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, MetaData
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy.orm import sessionmaker
 import sqlalchemy
 import logging
 
 Base = declarative_base()
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 conn_type = "mysql+pymysql"
@@ -15,11 +16,13 @@ password = os.getenv("MYSQL_PASSWORD")
 host = os.getenv("MYSQL_HOST")
 port = os.getenv("MYSQL_PORT")
 db_name = os.getenv("DATABASE_NAME")
-engine_string = f"{conn_type}://{user}:{password}@{host}:{port}/{db_name}"
+ENGINE_STRING = f"{conn_type}://{user}:{password}@{host}:{port}/{db_name}"
 
 
 class ModelResult(Base):
-    """Create a data model for the database to be set up for storing model result"""
+    """
+    create new table in AWS RDS
+    """
 
     __tablename__ = 'ModelResult'
 
@@ -34,7 +37,14 @@ class ModelResult(Base):
 
 
 def generate_new_db(args):
-    """create new table in AWS RDS"""
+    """
+    create new table in AWS RDS
+
+    Args:
+        engine_string [string]: mysql connection engine string to create table at
+    Returns:
+        None
+    """
     try:
         engine = sqlalchemy.create_engine(args.engine_string)
         Base.metadata.create_all(engine)
@@ -45,8 +55,8 @@ def generate_new_db(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Pass in engine string to generate new database.")
-    parser.add_argument("--engine_string", default=engine_string,
+    parser.add_argument("--engine_string", default=ENGINE_STRING,
                         help="mysql engine string")
     arg = parser.parse_args()
 
-    generate_new_db(engine_string)
+    generate_new_db(ENGINE_STRING)

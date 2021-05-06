@@ -1,30 +1,30 @@
 import boto3
 import botocore
 import sys
-import os
 from io import StringIO
 import pandas as pd
 import requests
 import logging
 import argparse
-import yaml
 import re
 import src.config as config
-data_url = config.data_url
-local_data_path = config.local_data_path
-s3_data_path = config.s3_data_path
 
+data_url = config.DATA_URL
+local_data_path = config.LOCAL_DATA_PATH
+s3_data_path = config.S3_DATA_PATH
+
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def download_data(local_path=local_data_path):
     """
-    download static, public, data file into python using the request library, and convert to pandas dataframe
+    download static, public, data file into python using the request library, save csv to local path, and convert to pandas dataframe
 
     Args:
-        local_path: local path to download raw data to
+        local_path [string]: local path to download raw data to
     Returns:
-        data: raw data as a pandas dataframe
+        data [pandas dataframe]: raw data as a pandas dataframe
     """
 
     try:
@@ -41,6 +41,15 @@ def download_data(local_path=local_data_path):
 
 
 def parse_s3(s3path):
+    """
+    parse s3path into bucket name and path
+
+    Args:
+        s3path [string]: s3 path to upload raw data
+    Returns:
+        s3bucket [string]: bucket name to upload raw data to
+        s3path [string]: path in s3bucket to upload raw data to
+    """
     regex = r"s3://([\w._-]+)/([\w./_-]+)"
 
     m = re.match(regex, s3path)
@@ -51,6 +60,15 @@ def parse_s3(s3path):
 
 
 def upload_file_to_s3(args):
+    """
+    upload raw data files to s3 bucket
+
+    Args:
+        local_path [string]: local path to download raw data
+        s3_path [string]: s3 path to upload raw data
+    Returns:
+        None
+    """
     download_data(args.local_path)
 
     s3bucket, s3_just_path = parse_s3(args.s3_path)

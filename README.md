@@ -8,11 +8,10 @@ QA: Wenyang Pan
 - Set your environment variables for AWS in terminal:
   * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`  
   * `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>`  
-  * `export BUCKET_NAME=msia423-dong`  
 
-- Open `src/config.py` and edit `local_data_path` to the path where you want the raw data to be downloaded locally and `s3_data_path` to the path where you want to upload the raw data in s3
+- Open `src/config.py` and edit `LOCAL_DATA_PATH` to the path where you want the raw data to be downloaded locally and `S3_DATA_PATH` to the path where you want to upload the raw data in s3
  
-- Execute docker command to run data pipeline
+- Execute docker file to run data pipeline python commands
 
 ## Project Charter 
 

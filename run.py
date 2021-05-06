@@ -1,16 +1,15 @@
 import argparse
 import logging.config
-import os
 
 logging.config.fileConfig('config/logging/local.conf')
 logger = logging.getLogger(__name__)
 
-import src.config as config
-local_data_path = config.local_data_path
-s3_data_path = config.s3_data_path
-engine_string = config.engine_string
 import src.load_data as ld
 import src.generate_db as gdb
+import src.config as config
+local_data_path = config.LOCAL_DATA_PATH
+s3_data_path = config.S3_DATA_PATH
+engine_string = config.ENGINE_STRING
 
 # from src.add_songs import TrackManager, create_db
 # from config.flaskconfig import SQLALCHEMY_DATABASE_URI
