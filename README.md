@@ -4,16 +4,6 @@ Author: Zizhuo (Xavier) Dong
 
 QA: Wenyang Pan
 
-## Instruction to run data pipeline
-- Set your environment variables for AWS in terminal:
-  * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`  
-  * `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>`  
-
-- Open `src/config.py`
-  * edit `LOCAL_DATA_PATH` to the path where you want the raw data to be downloaded locally and `S3_DATA_PATH` to the path where you want to upload the raw data in s3
-  * edit RDS Credential section to your own mysql credentials (default to use OS environment variables)
-- Execute docker file to run data pipeline python commands
-
 ## Project Charter 
 
 #### Background 
@@ -134,6 +124,108 @@ Their frequency of use and feedbacks on how they use the app to help them do the
 ├── requirements.txt                  <- Python package dependencies 
 ```
 
+## Instruction to run data pipeline
+
+#### Set AWS access key
+
+- Set your environment variables for AWS in terminal:
+  * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`\
+  `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>` 
+
+#### Set mysql connection variable
+- Set your environment variables for mysql in terminal:
+  * `export MYSQL_USER=<your_username>` \
+  `export MYSQL_PASSWORD=<your_password>` \
+  `export MYSQL_HOST=<your_rds_endpoint>` \
+  `export MYSQL_PORT=<your_rds_port>` \
+  `export DATABASE_NAME=<your_database_name>`
+  
+#### Edit config.py
+
+- Open `config/config.py`
+  * edit `LOCAL_DATA_PATH` to the path where you want the raw data to be downloaded locally 
+  * edit `S3_DATA_PATH` to the path where you want to upload the raw data in s3
+
+
+### Build Docker Image
+
+- Connect to Northwestern VPN
+- In terminal, change directory to root directory of project `<local_path>/2021-msia423-dong-zizhuo-project/` 
+- Run the following command in terminal
+
+    `docker build -f app/Dockerfile -t searchfrisk .` 
+  
+### Ingesting data 
+
+#### Upload to S3
+
+```
+python run.py ingest --local_path={your_local_path} --s3_path={your_s3_path}
+```
+
+#### Upload to S3 with docker
+```
+docker run -it \
+    -e AWS_ACCESS_KEY_ID \
+    -e AWS_SECRET_ACCESS_KEY \
+    searchfrisk run.py ingest --local_path={your_local_path} --s3_path={your_s3_path}`
+```
+
+`--local_path` and `--s3_path` argument are optional if you set a default value for `LOCAL_DATA_PATH` and `S3_DATA_PATH` in `config.py`
+
+### Create the database
+
+- By default, `python run.py create_db` creates a mysql database at `sqlite:///data/msia423_db.db` if `MYSQL_HOST` is not defined as an environment variable
+- if `MYSQL_HOST` environment variable defined, a mysql database will be created in RDS
+
+#### Creating local mysql database in sqlite
+
+`python run.py create_db --engine_string {your_local_engine_string}`
+
+#### Creating local mysql database in sqlite (using docker)
+
+`docker run searchfrisk run.py create_db --engine_string {your_local_engine_string}`
+
+#### Creating mysql database in RDS 
+
+```
+python run.py create_db --engine_string {your_rds_engine_string}`
+```
+#### Creating mysql database in RDS (using docker) 
+
+```
+docker run -it 
+    -e MYSQL_HOST \ 
+    -e MYSQL_PORT \
+    -e MYSQL_USER \
+    -e MYSQL_PASSWORD \
+    -e DATABASE_NAME \
+    searchfrisk run.py create_db --engine_string {your_rds_engine_string}'
+```
+
+### Connect to database using docker
+
+Run the following docker command in terminal to connect to mysql database in RDS
+
+```
+docker run -it --rm \
+    mysql:5.7.33 \
+    mysql \
+    -h${MYSQL_HOST} \
+    -u${MYSQL_USER} \
+    -p${MYSQL_PASSWORD}
+```
+
+After making a connection to your RDS mysql database
+
+```
+show databases;
+use <your_database_name>
+view tables;
+```
+Verify that table `ModelResult` has been successfully created in your RDS database
+
+
 ## Running the app
 ### 1. Initialize the database 
 
@@ -142,7 +234,7 @@ To create the database in the location configured in `config.py` run:
 
 `python run.py create_db --engine_string=<engine_string>`
 
-By default, `python run.py create_db` creates a database at `sqlite:///data/tracks.db`.
+By default, `python run.py create_db` creates a database at `sqlite:///data/msia423_db.db`.
 
 #### Adding songs 
 To add songs to the database:
@@ -185,7 +277,7 @@ LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Pyt
 HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
 PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///data/tracks.db'  # URI (engine string) for database that contains tracks
-APP_NAME = "penny-lane"
+APP_NAME = "searchfrisk"
 SQLALCHEMY_TRACK_MODIFICATIONS = True 
 SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
 MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
@@ -208,7 +300,7 @@ You should now be able to access the app at http://0.0.0.0:5000/ in your browser
 The Dockerfile for running the flask app is in the `app/` folder. To build the image, run from this directory (the root of the repo): 
 
 ```bash
- docker build -f app/Dockerfile -t pennylane .
+docker build -f app/Dockerfile -t searchfrisk .
 ```
 
 This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.

@@ -5,13 +5,13 @@ from os import path
 PROJECT_HOME = path.dirname(path.abspath(__file__))
 
 # logging config
-LOGGING_CONFIG = path.join(PROJECT_HOME, '../config/logging/local.conf')
+LOGGING_CONFIG = path.join(PROJECT_HOME, 'logging/local.conf')
 
 # data source
 DATA_URL = "https://www1.nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/stop-question-frisk/sqf-2015.csv"
 
 # local data path
-LOCAL_DATA_PATH = "C:/Users/dongz/PycharmProjects/2021-msia423-dong-zizhuo-project/data/raw/sqf-2015.csv"
+LOCAL_DATA_PATH = "./data/raw/sqf-2015.csv"
 
 # s3 data path
 S3_DATA_PATH = "s3://msia423-dong/raw/sqf-2015.csv"

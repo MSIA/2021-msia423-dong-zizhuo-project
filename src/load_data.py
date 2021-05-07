@@ -7,13 +7,12 @@ import requests
 import logging
 import argparse
 import re
-import src.config as config
+import config.config as config
 
 data_url = config.DATA_URL
 local_data_path = config.LOCAL_DATA_PATH
 s3_data_path = config.S3_DATA_PATH
 
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

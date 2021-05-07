@@ -6,13 +6,11 @@ logger = logging.getLogger(__name__)
 
 import src.load_data as ld
 import src.generate_db as gdb
-import src.config as config
+import config.config as config
 local_data_path = config.LOCAL_DATA_PATH
 s3_data_path = config.S3_DATA_PATH
-engine_string = config.ENGINE_STRING
 
-# from src.add_songs import TrackManager, create_db
-# from config.flaskconfig import SQLALCHEMY_DATABASE_URI
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -26,8 +24,11 @@ if __name__ == '__main__':
 
     # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create_db", description="create database")
-    sb_create.add_argument("--engine_string", required=False, help="mysql connection engine string", default=engine_string)
-    sb_create.set_defaults(func=gdb.generate_new_db)
+    sb_create.add_argument("--engine_string", required=False, help="mysql connection engine string",
+                           default=SQLALCHEMY_DATABASE_URI)
+    # sb_create.add_argument("--local", required=False, help="local database or not",
+    #                        default=True)
+    sb_create.set_defaults(func=gdb.create_db)
 
     # Parse args and run corresponding pipeline
     args = parser.parse_args()
