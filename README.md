@@ -105,7 +105,7 @@ python run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
 docker run -it \
     -e AWS_ACCESS_KEY_ID \
     -e AWS_SECRET_ACCESS_KEY \
-    searchfrisk run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}`
+    searchfrisk run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
 ```
 
 `--local_path` and `--s3_path` argument are optional if you set a default value for `LOCAL_DATA_PATH` and `S3_DATA_PATH` in `config.py`
@@ -126,7 +126,7 @@ docker run -it \
 #### Creating mysql database in RDS 
 
 ```
-python run.py create_db --engine_string {your_rds_engine_string}`
+python run.py create_db --engine_string {your_rds_engine_string}
 ```
 #### Creating mysql database in RDS (using docker) 
 

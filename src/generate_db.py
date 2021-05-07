@@ -1,7 +1,6 @@
 import sys
 import argparse
 import sqlalchemy
-import pandas as pd
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 import logging
