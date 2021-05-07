@@ -160,7 +160,7 @@ Their frequency of use and feedbacks on how they use the app to help them do the
 #### Upload to S3
 
 ```
-python run.py ingest --local_path={your_local_path} --s3_path={your_s3_path}
+python run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
 ```
 
 #### Upload to S3 with docker
@@ -168,7 +168,7 @@ python run.py ingest --local_path={your_local_path} --s3_path={your_s3_path}
 docker run -it \
     -e AWS_ACCESS_KEY_ID \
     -e AWS_SECRET_ACCESS_KEY \
-    searchfrisk run.py ingest --local_path={your_local_path} --s3_path={your_s3_path}`
+    searchfrisk run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}`
 ```
 
 `--local_path` and `--s3_path` argument are optional if you set a default value for `LOCAL_DATA_PATH` and `S3_DATA_PATH` in `config.py`
