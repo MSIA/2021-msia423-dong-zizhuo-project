@@ -16,4 +16,5 @@ RUN chmod +x app/boot.sh
 
 EXPOSE 5000
 
-CMD ["./app/boot.sh"]
+ENTRYPOINT ["python3"]
+#CMD ["./app/boot.sh"]

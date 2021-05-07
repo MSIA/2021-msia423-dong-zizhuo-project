@@ -16,8 +16,8 @@ logger = logging.getLogger(app.config["APP_NAME"])
 logger.debug('Web app log')
 
 # Initialize the database session
-from src.add_songs import Tracks, TrackManager
-track_manager = TrackManager(app)
+# from src.add_songs import Tracks, TrackManager
+# track_manager = TrackManager(app)
 
 @app.route('/')
 def index():

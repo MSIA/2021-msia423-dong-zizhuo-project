@@ -1,30 +1,29 @@
 import boto3
 import botocore
 import sys
-import os
 from io import StringIO
 import pandas as pd
 import requests
 import logging
 import argparse
-import yaml
 import re
-import config
-data_url = config.data_url
-local_data_path = config.local_data_path
-s3_data_path = config.s3_data_path
+import config.config as config
+
+data_url = config.DATA_URL
+local_data_path = config.LOCAL_DATA_PATH
+s3_data_path = config.S3_DATA_PATH
 
 logger = logging.getLogger(__name__)
 
 
-def download_data(local_path):
+def download_data(local_path=local_data_path):
     """
-    download static, public, data file into python using the request library, and convert to pandas dataframe
+    download static, public, data file into python using the request library, save csv to local path, and convert to pandas dataframe
 
     Args:
-        local_path: local path to download raw data to
+        local_path [string]: local path to download raw data to
     Returns:
-        data: raw data as a pandas dataframe
+        data [pandas dataframe]: raw data as a pandas dataframe
     """
 
     try:
@@ -41,6 +40,15 @@ def download_data(local_path):
 
 
 def parse_s3(s3path):
+    """
+    parse s3path into bucket name and path
+
+    Args:
+        s3path [string]: s3 path to upload raw data
+    Returns:
+        s3bucket [string]: bucket name to upload raw data to
+        s3path [string]: path in s3bucket to upload raw data to
+    """
     regex = r"s3://([\w._-]+)/([\w./_-]+)"
 
     m = re.match(regex, s3path)
@@ -50,20 +58,28 @@ def parse_s3(s3path):
     return s3bucket, s3path
 
 
-def upload_file_to_s3(local_path=local_data_path, s3path=s3_data_path):
-    download_data(local_path)
+def upload_file_to_s3(args):
+    """
+    upload raw data files to s3 bucket
 
-    s3bucket, s3_just_path = parse_s3(s3path)
+    Args:
+        local_path [string]: local path to download raw data
+        s3_path [string]: s3 path to upload raw data
+    Returns:
+        None
+    """
+    download_data(args.local_path)
+
+    s3bucket, s3_just_path = parse_s3(args.s3_path)
 
     s3 = boto3.resource("s3")
     bucket = s3.Bucket(s3bucket)
-
     try:
-        bucket.upload_file(local_path, s3_just_path)
+        bucket.upload_file(args.local_path, s3_just_path)
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
-        logger.info('Data uploaded from %s to %s', local_path, s3path)
+        logger.info('Data uploaded from %s to %s', args.local_path, args.s3_path)
 
 
 if __name__ == '__main__':
@@ -72,6 +88,8 @@ if __name__ == '__main__':
                         help="Where to upload data into S3")
     parser.add_argument('--local_path', default=local_data_path,
                         help="Where to find raw data to be uploaded locally")
+    parser.set_defaults(func=upload_file_to_s3)
     args = parser.parse_args()
+    args.func(args)
 
-    upload_file_to_s3(local_data_path, s3_data_path)
+    # upload_file_to_s3(local_data_path, s3_data_path)

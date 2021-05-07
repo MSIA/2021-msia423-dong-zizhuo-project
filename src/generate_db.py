@@ -1,25 +1,23 @@
-import os
+import sys
 import argparse
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, MetaData
-from sqlalchemy.orm import sessionmaker
 import sqlalchemy
+import pandas as pd
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
 import logging
+import config.config as config
 
+ENGINE_STRING = config.ENGINE_STRING
 
-Base = declarative_base()
 logger = logging.getLogger(__name__)
 
-conn_type = "mysql+pymysql"
-user = os.getenv("MYSQL_USER")
-password = os.getenv("MYSQL_PASSWORD")
-host = os.getenv("MYSQL_HOST")
-port = os.getenv("MYSQL_PORT")
-db_name = os.getenv("DATABASE_NAME")
-engine_string = f"{conn_type}://{user}:{password}@{host}:{port}/{db_name}"
+Base = declarative_base()
+
 
 class ModelResult(Base):
-    """Create a data model for the database to be set up for storing model result"""
+    """
+    create new table in AWS RDS
+    """
 
     __tablename__ = 'ModelResult'
 
@@ -33,20 +31,41 @@ class ModelResult(Base):
         return f'<ModelResult model {self.model_name} accuracy {self.accuracy} precision {self.precision} recall {self.recall} roc_auc {self.roc_auc} '
 
 
-def generate_new_db(eng_str=engine_string):
-    """create new table in AWS RDS"""
+def create_db(args):
+    """
+    create new table in AWS RDS
+
+    Args:
+        engine_string [string]: mysql connection engine string to create table at
+        local [boolean]: whether to create local database or in RDS
+    Returns:
+        None
+    """
+
     try:
-        engine = sqlalchemy.create_engine(eng_str)
+        engine = sqlalchemy.create_engine(args.engine_string)
         Base.metadata.create_all(engine)
-        logger.info("Database generated")
+        logger.info("Database generated:")
+        logger.info(args.engine_string)
     except sqlalchemy.exc.OperationalError:
         logger.error("Incorrect mysql credentials!")
+        sys.exit(1)
+
+    # Show all tables with log
+    # if not args.local:
+    #     query = "show tables;"
+    #     df = pd.read_sql(query, con=engine)
+    #     logger.info('Tables: {}'.format(list(df.iloc[:, 0])))
+    # else:
+    #     pass
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Pass in engine string to generate new database.")
-    parser.add_argument("--eng_str", default=engine_string,
+    parser.add_argument("--engine_string", default=ENGINE_STRING,
                         help="mysql engine string")
-    arg = parser.parse_args()
+    parser.set_defaults(func=create_db)
+    args = parser.parse_args()
+    args.func(args)
 
-    generate_new_db(engine_string)
+    # create_db(ENGINE_STRING)
