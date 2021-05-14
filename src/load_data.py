@@ -7,11 +7,7 @@ import requests
 import logging
 import argparse
 import re
-import config.config as config
 
-data_url = config.DATA_URL
-local_data_path = config.LOCAL_DATA_PATH
-s3_data_path = config.S3_DATA_PATH
 
 logger = logging.getLogger(__name__)
 
@@ -80,16 +76,3 @@ def upload_file_to_s3(args):
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
         logger.info('Data uploaded from %s to %s', args.local_path, args.s3_path)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--s3_path', default=s3_data_path,
-                        help="Where to upload data into S3")
-    parser.add_argument('--local_path', default=local_data_path,
-                        help="Where to find raw data to be uploaded locally")
-    parser.set_defaults(func=upload_file_to_s3)
-    args = parser.parse_args()
-    args.func(args)
-
-    # upload_file_to_s3(local_data_path, s3_data_path)
