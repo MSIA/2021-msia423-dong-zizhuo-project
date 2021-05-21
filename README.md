@@ -185,11 +185,15 @@ docker run -it \
 
 #### Creating local mysql database in sqlite
 
-`python run.py create_db --engine_string {your_local_engine_string}`
+```
+python run.py create_db --engine_string {your_local_engine_string}
+```
 
 #### Creating local mysql database in sqlite (using docker)
 
-`docker run searchfrisk run.py create_db --engine_string {your_local_engine_string}`
+```
+docker run searchfrisk run.py create_db --engine_string {your_local_engine_string}
+```
 
 #### Creating mysql database in RDS 
 
@@ -226,7 +230,7 @@ After making a connection to your RDS mysql database
 ```
 show databases;
 use <your_database_name>
-view tables;
+show tables;
 ```
 Verify that table `ModelResult` has been successfully created in your RDS database
 

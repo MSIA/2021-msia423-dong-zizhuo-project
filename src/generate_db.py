@@ -34,7 +34,6 @@ def create_db(args):
 
     Args:
         engine_string [string]: mysql connection engine string to create table at
-        local [boolean]: whether to create local database or in RDS
     Returns:
         None
     """
