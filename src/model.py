@@ -161,7 +161,7 @@ def run_model(args):
     logger.info("Configuration file loaded from %s" % args.config)
 
     raw_df = pd.read_csv(config['input']['local_data_path'])
-    # raw_df = pd.read_csv(config['input']['s3_data_path'])
+
     clean_df = clean_data(raw_df)
     feature_df, label_df, raw_f_test = preprocess_data(clean_df, config['preprocess']['label'])
     f_test, l_test = train_model(feature_df, label_df)
