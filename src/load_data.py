@@ -5,7 +5,6 @@ from io import StringIO
 import pandas as pd
 import requests
 import logging
-import argparse
 import re
 import config.config as config
 
@@ -13,6 +12,7 @@ data_url = config.DATA_URL
 local_data_path = config.LOCAL_DATA_PATH
 s3_data_path = config.S3_DATA_PATH
 
+logging.basicConfig(format='%(name)-12s %(levelname)-8s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -27,6 +27,7 @@ def download_data(local_path=local_data_path):
     """
 
     try:
+        logger.debug("Attempting to download raw data from data source")
         r = requests.get(data_url)
     except requests.exceptions.RequestException:
         logger.error("Unable to download raw data from data source")
@@ -75,6 +76,31 @@ def upload_file_to_s3(args):
     s3 = boto3.resource("s3")
     bucket = s3.Bucket(s3bucket)
     try:
+        logger.debug("Attempting to upload raw data to s3")
+        bucket.upload_file(args.local_path, s3_just_path)
+    except botocore.exceptions.NoCredentialsError:
+        logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
+    else:
+        logger.info('Data uploaded from %s to %s', args.local_path, args.s3_path)
+
+
+def upload_result_to_s3(args):
+    """
+    upload result files to s3 bucket
+
+    Args:
+        local_path [string]: local path to result data
+        s3_path [string]: s3 path to upload result data
+    Returns:
+        None
+    """
+
+    s3bucket, s3_just_path = parse_s3(args.s3_path)
+
+    s3 = boto3.resource("s3")
+    bucket = s3.Bucket(s3bucket)
+    try:
+        logger.debug("Attempting to upload raw data to s3")
         bucket.upload_file(args.local_path, s3_just_path)
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')

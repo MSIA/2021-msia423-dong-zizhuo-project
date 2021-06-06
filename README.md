@@ -4,26 +4,6 @@ Author: Zizhuo (Xavier) Dong
 
 QA: Wenyang Pan
 
-### ***TOC needs to be updated**
-<!-- toc -->
-
-- [Directory structure](#directory-structure)
-- [Running the app](#running-the-app)
-  * [1. Initialize the database](#1-initialize-the-database)
-    + [Create the database with a single song](#create-the-database-with-a-single-song)
-    + [Adding additional songs](#adding-additional-songs)
-    + [Defining your engine string](#defining-your-engine-string)
-      - [Local SQLite database](#local-sqlite-database)
-  * [2. Configure Flask app](#2-configure-flask-app)
-  * [3. Run the Flask app](#3-run-the-flask-app)
-- [Running the app in Docker](#running-the-app-in-docker)
-  * [1. Build the image](#1-build-the-image)
-  * [2. Run the container](#2-run-the-container)
-  * [3. Kill the container](#3-kill-the-container)
-  * [Workaround for potential Docker problem for Windows.](#workaround-for-potential-docker-problem-for-windows)
-
-<!-- tocstop -->
-
 ## Directory structure 
 
 ```
@@ -68,6 +48,10 @@ QA: Wenyang Pan
 ├── requirements.txt                  <- Python package dependencies 
 ```
 
+
+## Deployed app URL:
+
+http://searc-Publi-AS77N2FV3OSM-1020167833.us-east-2.elb.amazonaws.com
 
 ## Project Charter 
 
@@ -165,7 +149,7 @@ Their frequency of use and feedbacks on how they use the app to help them do the
 #### Upload to S3
 
 ```
-python run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
+python run.py ingest --local_path {your_local_data_path} --s3_path {your_s3_data_path}
 ```
 
 #### Upload to S3 with docker
@@ -173,7 +157,7 @@ python run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
 docker run -it \
     -e AWS_ACCESS_KEY_ID \
     -e AWS_SECRET_ACCESS_KEY \
-    searchfrisk run.py ingest --local_path {your_local_path} --s3_path {your_s3_path}
+    searchfrisk run.py ingest --local_path {your_local_data_path} --s3_path {your_s3_data_path}
 ```
 
 `--local_path` and `--s3_path` argument are optional if you set a default value for `LOCAL_DATA_PATH` and `S3_DATA_PATH` in `config.py`
@@ -234,50 +218,62 @@ show tables;
 ```
 Verify that table `ModelResult` has been successfully created in your RDS database
 
+### Running the model
+
+#### Train model and save model and result
+
+```
+python run.py run_model --input {your_local_data_path} --config {your_model_config_path}
+```
+
+#### Train model and save model and result with docker
+
+```
+docker run searchfrisk run.py run_model --input {your_local_data_path} --config {your_model_config_path}
+```
+
+### Ingesting result 
+
+#### Upload model result to S3
+
+```
+python run.py ingest_result --local_path {your_local_result_path} --s3_path {your_s3_result_path}
+```
+
+#### Upload model result to S3 with docker
+```
+docker run -it \
+    -e AWS_ACCESS_KEY_ID \
+    -e AWS_SECRET_ACCESS_KEY \
+    searchfrisk run.py ingest_result --local_path {your_local_result_path} --s3_path {your_s3_result_path}
+```
+
+`--local_path` and `--s3_path` argument are optional if you set a default value for `LOCAL_RESULT_PATH` and `S3_RESULT_PATH` in `config.py`
+
+### Add result to database 
+
+#### Upload model result as a table to RDS
+
+```
+python run.py add_result --input {your_result_path(local or s3)} --engine_string {your_rds_engine_string}
+```
+
+#### Upload model result as a table to RDS with docker
+
+```
+docker run -it 
+    -e MYSQL_HOST \ 
+    -e MYSQL_PORT \
+    -e MYSQL_USER \
+    -e MYSQL_PASSWORD \
+    -e DATABASE_NAME \
+    searchfrisk run.py add_result --input {your_result_path(local or s3)} --engine_string {your_rds_engine_string}
+```
 
 
 ## Running the app
-### 1. Initialize the database 
 
-#### Create the database 
-To create the database in the location configured in `config.py` run: 
-
-`python run.py create_db --engine_string=<engine_string>`
-
-By default, `python run.py create_db` creates a database at `sqlite:///data/msia423_db.db`.
-
-#### Adding songs 
-To add songs to the database:
-
-`python run.py ingest --engine_string=<engine_string> --artist=<ARTIST> --title=<TITLE> --album=<ALBUM>`
-
-By default, `python run.py ingest` adds *Minor Cause* by Emancipator to the SQLite database located in `sqlite:///data/tracks.db`.
-
-#### Defining your engine string 
-A SQLAlchemy database connection is defined by a string with the following format:
-
-`dialect+driver://username:password@host:port/database`
-
-The `+dialect` is optional and if not provided, a default is used. For a more detailed description of what `dialect` and `driver` are and how a connection is made, you can see the documentation [here](https://docs.sqlalchemy.org/en/13/core/engines.html). We will cover SQLAlchemy and connection strings in the SQLAlchemy lab session on 
-##### Local SQLite database 
-
-A local SQLite database can be created for development and local testing. It does not require a username or password and replaces the host and port with the path to the database file: 
-
-```python
-engine_string='sqlite:///data/tracks.db'
-
-```
-
-The three `///` denote that it is a relative path to where the code is being run (which is from the root of this directory).
-
-You can also define the absolute path with four `////`, for example:
-
-```python
-engine_string = 'sqlite://///Users/cmawer/Repos/2020-MSIA423-template-repository/data/tracks.db'
-```
-
-
-### 2. Configure Flask app 
+### Configure Flask app 
 
 `config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
 
@@ -301,7 +297,7 @@ To run the Flask app, run:
 python app.py
 ```
 
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
+You should now be able to access the app at `http://localhost:5000/` in your browser.
 
 ## Running the app in Docker 
 
@@ -313,18 +309,18 @@ The Dockerfile for running the flask app is in the `app/` folder. To build the i
 docker build -f app/Dockerfile -t searchfrisk .
 ```
 
-This command builds the Docker image, with the tag `pennylane`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image, with the tag `searchfrisk`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
  
 ### 2. Run the container 
 
 To run the app, run from this directory: 
 
 ```bash
-docker run -p 5000:5000 --name test pennylane
+docker run -it -e MYSQL_HOST -e MYSQL_PORT -e MYSQL_USER -e MYSQL_PASSWORD -e DATABASE_NAME -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -p 5000:5000 --name test searchfrisk
 ```
-You should now be able to access the app at http://0.0.0.0:5000/ in your browser.
+You should now be able to access the app at `http://localhost:5000/` in your browser.
 
-This command runs the `pennylane` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port. 
+This command runs the `searchfrisk` image as a container named `test` and forwards the port 5000 from container to your laptop so that you can access the flask app exposed through that port.
 
 If `PORT` in `config/flaskconfig.py` is changed, this port should be changed accordingly (as should the `EXPOSE 5000` line in `app/Dockerfile`)
 
@@ -338,23 +334,6 @@ docker kill test
 
 where `test` is the name given in the `docker run` command.
 
-### Example using `python3` as an entry point
-
-We have included another example of a Dockerfile, `app/Dockerfile_python` that has `python3` as the entry point such that when you run the image as a container, the command `python3` is run, followed by the arguments given in the `docker run` command after the image name. 
-
-To build this image: 
-
-```bash
- docker build -f app/Dockerfile_python -t pennylane .
-```
-
-then run the `docker run` command: 
-
-```bash
-docker run -p 5000:5000 --name test pennylane app.py
-```
-
-The new image defines the entry point command as `python3`. Building the sample PennyLane image this way will require initializing the database prior to building the image so that it is copied over, rather than created when the container is run. Therefore, please **do the step [Create the database with a single song](#create-the-database-with-a-single-song) above before building the image**.
 
 # Testing
 

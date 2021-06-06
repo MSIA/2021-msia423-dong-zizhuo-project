@@ -16,6 +16,15 @@ LOCAL_DATA_PATH = "./data/raw/sqf-2015.csv"
 # s3 data path
 S3_DATA_PATH = "s3://msia423-dong/raw/sqf-2015.csv"
 
+# model config file path
+MODEL_CONFIG_PATH = "./config/model_config.yml"
+
+# local result path
+LOCAL_RESULT_PATH = "./data/result.csv"
+
+# s3 result path
+S3_RESULT_PATH = "s3://msia423-dong/result.csv"
+
 # RDS MYSQL Credentials
 conn_type = "mysql+pymysql"
 user = os.environ.get("MYSQL_USER")
