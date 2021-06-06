@@ -6,6 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer
 import logging
+import warnings
+warnings.simplefilter("ignore")
 
 logging.basicConfig(format='%(name)-12s %(levelname)-8s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)

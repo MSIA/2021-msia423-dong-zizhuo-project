@@ -7,6 +7,8 @@ import requests
 import logging
 import re
 import config.config as config
+import warnings
+warnings.simplefilter("ignore")
 
 data_url = config.DATA_URL
 local_data_path = config.LOCAL_DATA_PATH

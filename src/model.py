@@ -1,5 +1,3 @@
-import warnings
-warnings.simplefilter("ignore")
 import logging
 import yaml
 import pandas as pd
@@ -8,7 +6,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-
+import warnings
+warnings.simplefilter("ignore")
 
 logging.basicConfig(format='%(name)-12s %(levelname)-8s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -66,7 +65,7 @@ def preprocess_data(df, label="searched"):
         label [str]: label to be classified (searched)
     Returns:
         feature_df, label_df [pandas dataframes]: preprocessed dataframes for model training as a pandas dataframe
-        raw_f_test [pandas dataframes]: original feature from test set before preprocessing
+        raw_f_test [pandas dataframes]: original feature from tests set before preprocessing
     """
     label_df = df[label]
     raw_feature_df = df.drop(['searched'], axis=1)
@@ -98,7 +97,7 @@ def train_model(feature_df, label_df, max_depth=14, max_features='sqrt', min_sam
         feature_df, label_df [pandas dataframes]: preprocessed dataframes for model training as a pandas dataframe
         saved_model_path [str]: path to saved trained model
     Returns:
-        f_test, l_test [pandas dataframes]: test set for making prediction
+        f_test, l_test [pandas dataframes]: tests set for making prediction
     """
     f_train, f_test, l_train, l_test = train_test_split(feature_df, label_df, test_size=0.2, random_state=123)
     forest_clf = RandomForestClassifier(max_depth=max_depth, min_samples_leaf=min_samples_leaf, max_features=max_features)
@@ -117,9 +116,9 @@ def predict(f_test, l_test, raw_f_test, saved_model_path, result_output_path):
     predict probability of being searched of a new record
 
     Args:
-        f_test [pandas dataframes]: feature test set for making prediction
-        l_test [pandas dataframes]: label test set for making prediction
-        raw_f_test [pandas dataframe]: original feature from test set before preprocessing
+        f_test [pandas dataframes]: feature tests set for making prediction
+        l_test [pandas dataframes]: label tests set for making prediction
+        raw_f_test [pandas dataframe]: original feature from tests set before preprocessing
         saved_model_path [str]: path to saved trained model
         result_output_path: path to save result dataframe as csv
     Returns:
@@ -166,7 +165,7 @@ def run_model(args):
     feature_df, label_df, raw_f_test = preprocess_data(clean_df, config['preprocess']['label'])
     f_test, l_test = train_model(feature_df, label_df)
 
-    logger.info("Attempting to make prediction on test set")
+    logger.info("Attempting to make prediction on tests set")
 
     predict(f_test, l_test, raw_f_test, config['predict']['saved_model_path'], config['predict']['result_output_path'])
 

@@ -43,8 +43,11 @@ QA: Wenyang Pan
 ├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project 
+│   ├── load_data.py                  <- Python scripts to download raw data and upload raw data to S3
+│   ├── generate_db.py                <- Python scripts to generate databaseand update database
+│   ├── run_model.py                  <- Python scripts to run the model pipeline
 │
-├── tests/                             <- Files necessary for running model tests (see documentation below) 
+├── tests/                            <- Files necessary for running model tests (see documentation below) 
 │
 ├── app.py                            <- Flask wrapper for running the model 
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts  
@@ -349,12 +352,12 @@ python -m pytest
 Using Docker, run the following, if the image has not been built yet:
 
 ```bash
- docker build -f app/Dockerfile_python -t pennylane .
+ docker build -f app/Dockerfile -t searchfrisk .
 ```
 
 To run the tests, run: 
 
 ```bash
- docker run penny -m pytest
+ docker run searchfrisk -m pytest
 ```
  
