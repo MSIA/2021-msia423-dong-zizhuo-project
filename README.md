@@ -126,7 +126,7 @@ Their frequency of use and feedbacks on how they use the app to help them do the
 
 - Set your environment variables for AWS in terminal:
   * `export AWS_ACCESS_KEY_ID='<your aws-access-key-id>'`\
-  `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>` 
+  * `export AWS_SECRET_ACCESS_KEY=<your aws-secret-access-key>` 
 
 #### Set mysql connection variable
 - Set your environment variables for mysql in terminal:
