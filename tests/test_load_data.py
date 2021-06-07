@@ -4,6 +4,9 @@ warnings.simplefilter("ignore")
 
 
 def test_parse_s3():
+    """
+    test s3 path parsing
+    """
     s3_path = "s3://msia423-dong/raw/sqf-2015.csv"
     s3bucket, s3path = parse_s3(s3_path)
     expected_bucket = "msia423-dong"
@@ -12,6 +15,9 @@ def test_parse_s3():
 
 
 def test_parse_s3_unhappy():
+    """
+    test wrong s3 path by giving local path
+    """
     s3_path = "./data/raw/sqf-2015.csv"
     try:
         s3bucket, s3path = parse_s3(s3_path)

@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
+from src.model import clean_data, preprocess_data
 import warnings
 warnings.simplefilter("ignore")
 
-from src.model import clean_data, preprocess_data
-
 
 def test_clean_data():
+    """
+    test if clean_data function remove all null rows
+    """
     input_df = pd.read_csv("./data/raw/sqf-2015.csv")
     input_df = input_df.head(1000)
     output_df = clean_data(input_df)
@@ -14,7 +16,10 @@ def test_clean_data():
     assert check_null != True
 
 
-def test_clean_data_unhappy():
+def test_clean_data_empty():
+    """
+    test if clean_data function works with empty dataframe
+    """
     input_df = pd.read_csv("./data/raw/sqf-2015.csv")
     test_df = pd.DataFrame([],
                            columns=list(input_df.columns.values))
@@ -23,7 +28,22 @@ def test_clean_data_unhappy():
     assert num_row == 0
 
 
-def test_preprocess_data():
+def test_clean_data_unhappy():
+    """
+    test if clean_data function handles incorrect dataframe input
+    """
+    test_df = pd.DataFrame([],
+                           columns=["wrong_column1", "wrong_column2"])
+    try:
+        output_df = clean_data(test_df)
+    except:
+        assert True
+
+
+def test_preprocess_data_categorical():
+    """
+    test if preprocess_data function returns dataframe with the correct categorical features set
+    """
     input_df = pd.read_csv("./data/raw/sqf-2015.csv")
     input_df = clean_data(input_df)
     feature_df, label_df, raw_f_test = preprocess_data(input_df)
@@ -37,7 +57,10 @@ def test_preprocess_data():
     assert result != True
 
 
-def test_preprocess_data_unhappy():
+def test_preprocess_data_numerical():
+    """
+    test if preprocess_data function returns dataframe with the correct numerical features set
+    """
     input_df = pd.read_csv("./data/raw/sqf-2015.csv")
     input_df = clean_data(input_df)
     feature_df, label_df, raw_f_test = preprocess_data(input_df)
@@ -47,5 +70,15 @@ def test_preprocess_data_unhappy():
     assert result == True
 
 
+def test_preprocess_data_unhappy():
+    """
+    test if preprocess_data function returns dataframe with the wrong features set
+    """
+    test_df = pd.DataFrame([],
+                           columns=["wrong_column1", "wrong_column2"])
+    try:
+        feature_df, label_df, raw_f_test = preprocess_data(test_df)
+    except:
+        assert True
 
 

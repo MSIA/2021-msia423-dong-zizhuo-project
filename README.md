@@ -59,6 +59,9 @@ QA: Wenyang Pan
 
 http://searc-Publi-AS77N2FV3OSM-1020167833.us-east-2.elb.amazonaws.com
 
+#### Please note: Northwestern VPN connection required to access deployed app
+#### Please note: Python version 3.6> required to run project pipeline
+
 ## Project Charter 
 
 #### Background 
@@ -116,8 +119,6 @@ We can potentially quantify the effectiveness of the app in this aspect by colle
 Their frequency of use and feedbacks on how they use the app to help them do their job can be consulted for whether the app is successful from a business perspective
 
 
-
-#### Please note: Python version 3.6> required
 
 ## Instruction to run data pipeline
 

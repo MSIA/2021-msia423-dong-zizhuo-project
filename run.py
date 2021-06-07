@@ -1,21 +1,21 @@
 import argparse
-import logging.config
-
-logging.config.fileConfig('config/logging/local.conf')
-logger = logging.getLogger(__name__)
-
+import logging
+import logging.config as logging_conf
 import src.load_data as load_data
 import src.generate_db as gen_db
 import src.model as model
 import config.config as config
+from src.generate_db import ModelResultManager
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
+
 local_data_path = config.LOCAL_DATA_PATH
 s3_data_path = config.S3_DATA_PATH
 model_config_path = config.MODEL_CONFIG_PATH
 local_result_path = config.LOCAL_RESULT_PATH
 s3_result_path = config.S3_RESULT_PATH
 
-from src.generate_db import ModelResultManager
-from config.flaskconfig import SQLALCHEMY_DATABASE_URI
+logging_conf.fileConfig('config/logging/local.conf')
+logger = logging.getLogger(__name__)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
