@@ -1,0 +1,13 @@
+input:
+  local_data_path: "./data/raw/sqf-2015.csv"
+  s3_data_path: "s3://msia423-dong/raw/sqf-2015.csv"
+preprocess:
+  label: "searched"
+train_model:
+  max_depth: 14
+  max_features: 'sqrt'
+  min_samples_leaf: 1
+  output_model_path: "./models/random_forest.sav"
+predict:
+  saved_model_path: "./models/random_forest.sav"
+  result_output_path: "data/result.csv"

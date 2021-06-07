@@ -7,37 +7,42 @@
 
 <body>
     <h3>
-         <a href = "{{ url_for('index') }}">Penny Lane Music Recommender</a>
+         New York City Search and Frisk Analysis
     </h3>
+
+    <form action="/" method=post>
+      <dl>
+        <input type=text size=15 name=sex placeholder="Sex">
+        <input type=text size=15 name=race placeholder="Race">
+        <input type=number name=age placeholder="Age">
+        <input type=submit value=Find>
+      </dl>
+    </form>
 
     <hr/>
     <table>
          <thead>
             <tr>
-               <th>Title</th>
-               <th>Artist</th>
-               <th>Album</th>
+               <th>sex</th>
+               <th>race</th>
+               <th>age</th>
+               <th>actual_searched</th>
+               <th>predicted_searched</th>
             </tr>
          </thead>
 
          <tbody>
-            {% for track in tracks %}
+            {% for result in results %}
                <tr>
-                   <td>{{ track.title }}</td>
-                   <td>{{ track.artist }}</td>
-                   <td>{{ track.album }}</td>
+                   <td>{{ result.sex }}</td>
+                   <td>{{ result.race }}</td>
+                   <td>{{ result.age }}</td>
+                   <td>{{ result.actual_searched }}</td>
+                   <td>{{ result.predicted_searched }}</td>
                </tr>
             {% endfor %}
          </tbody>
       </table>
-      <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-      <dl>
-        <input type=text size=15 name=title placeholder="Title">
-        <input type=text size=15 name=artist placeholder="Artist">
-        <input type=text size=15 name=album placeholder="Album">
-        <input type=submit value=Add>
-      </dl>
-    </form>
 
 </body>
 </html>
