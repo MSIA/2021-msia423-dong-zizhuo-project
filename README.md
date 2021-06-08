@@ -236,7 +236,7 @@ python run.py run_model --input {your_local_data_path} --config {your_model_conf
 #### Train model and save model and result with docker
 
 ```
-docker run searchfrisk run.py run_model --input {your_local_data_path} --config {your_model_config_path}
+docker run -it searchfrisk run.py run_model --input {your_local_data_path} --config {your_model_config_path}
 ```
 
 ### Ingesting result 
