@@ -11,5 +11,5 @@ venv/
 .mypy_cache/
 config/.mysqlconfig
 config.yml
-
-
+copilot/app/manifest.yml
+copilot
