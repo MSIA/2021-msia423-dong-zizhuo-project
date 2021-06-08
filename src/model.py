@@ -160,14 +160,19 @@ def run_model(args):
 
     logger.info("Configuration file loaded from %s" % args.config)
 
+    logger.debug("Attempting to download data from S3")
+
+    # Download data from s3
     download_data_from_s3(config['input']['local_data_path'], config['input']['s3_data_path'])
     raw_df = pd.read_csv(config['input']['local_data_path'])
+
+    logger.info("Raw  data downloaded from S3")
 
     clean_df = clean_data(raw_df)
     feature_df, label_df, raw_f_test = preprocess_data(clean_df, config['preprocess']['label'])
     f_test, l_test = train_model(feature_df, label_df)
 
-    logger.info("Attempting to make prediction on tests set")
+    logger.debug("Attempting to make prediction on tests set")
 
     predict(f_test, l_test, raw_f_test, config['predict']['saved_model_path'], config['predict']['result_output_path'])
 
