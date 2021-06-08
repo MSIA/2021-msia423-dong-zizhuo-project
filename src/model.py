@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 import warnings
 warnings.simplefilter("ignore")
+from src.load_data import download_data_from_s3
 
 logging.basicConfig(format='%(name)-12s %(levelname)-8s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -159,6 +160,7 @@ def run_model(args):
 
     logger.info("Configuration file loaded from %s" % args.config)
 
+    download_data_from_s3(config['input']['local_data_path'], config['input']['s3_data_path'])
     raw_df = pd.read_csv(config['input']['local_data_path'])
 
     clean_df = clean_data(raw_df)
