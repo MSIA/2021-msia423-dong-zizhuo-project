@@ -42,26 +42,26 @@ def download_data(local_path=local_data_path):
     return data
 
 
-def parse_s3(s3path):
+def parse_s3(s3_path):
     """
-    parse s3path into bucket name and path
+    parse s3_path into bucket name and path
 
     Args:
-        s3path [string]: s3 path to upload raw data
+        s3_path [string]: s3 path to upload raw data
     Returns:
-        s3bucket [string]: bucket name to upload raw data to
-        s3path [string]: path in s3bucket to upload raw data to
+        s3_bucket [string]: bucket name to upload raw data to
+        s3_just_path [string]: path in s3 bucket to upload raw data to
     """
     regex = r"s3://([\w._-]+)/([\w./_-]+)"
 
-    m = re.match(regex, s3path)
-    s3bucket = m.group(1)
-    s3path = m.group(2)
+    m = re.match(regex, s3_path)
+    s3_bucket = m.group(1)
+    s3_just_path = m.group(2)
 
-    return s3bucket, s3path
+    return s3_bucket, s3_just_path
 
 
-def upload_file_to_s3(args):
+def upload_data_to_s3(args):
     """
     upload raw data files to s3 bucket
 
@@ -73,10 +73,10 @@ def upload_file_to_s3(args):
     """
     download_data(args.local_path)
 
-    s3bucket, s3_just_path = parse_s3(args.s3_path)
+    s3_bucket, s3_just_path = parse_s3(args.s3_path)
 
     s3 = boto3.resource("s3")
-    bucket = s3.Bucket(s3bucket)
+    bucket = s3.Bucket(s3_bucket)
     try:
         logger.debug("Attempting to upload raw data to s3")
         bucket.upload_file(args.local_path, s3_just_path)
@@ -97,10 +97,10 @@ def upload_result_to_s3(args):
         None
     """
 
-    s3bucket, s3_just_path = parse_s3(args.s3_path)
+    s3_bucket, s3_just_path = parse_s3(args.s3_path)
 
     s3 = boto3.resource("s3")
-    bucket = s3.Bucket(s3bucket)
+    bucket = s3.Bucket(s3_bucket)
     try:
         logger.debug("Attempting to upload raw data to s3")
         bucket.upload_file(args.local_path, s3_just_path)
@@ -110,25 +110,25 @@ def upload_result_to_s3(args):
         logger.info('Data uploaded from %s to %s', args.local_path, args.s3_path)
 
 
-def download_data_from_s3(local_path=local_data_path, s3path=s3_data_path):
+def download_data_from_s3(local_path=local_data_path, s3_path=s3_data_path):
     """
     download static, public, data file from s3 bucket
 
     Args:
         local_path [string]: local path to download raw data to
-        s3path [string]: s3 path to download raw data from
+        s3_path [string]: s3 path to download raw data from
     Returns:
         None
     """
 
-    s3bucket, s3_just_path = parse_s3(s3path)
+    s3_bucket, s3_just_path = parse_s3(s3_path)
 
     s3 = boto3.resource("s3")
-    bucket = s3.Bucket(s3bucket)
+    bucket = s3.Bucket(s3_bucket)
 
     try:
         bucket.download_file(s3_just_path, local_path)
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
-        logger.info('Data downloaded from %s to %s', s3path, local_path)
+        logger.info('Data downloaded from %s to %s', s3_path, local_path)

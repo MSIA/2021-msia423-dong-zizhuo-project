@@ -15,6 +15,26 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 
+def create_db(args):
+    """
+    create new table in AWS RDS
+
+    Args:
+        engine_string [string]: mysql connection engine string to create table at
+    Returns:
+        None
+    """
+
+    try:
+        logger.debug("Attempting to create database")
+        engine = sqlalchemy.create_engine(args.engine_string)
+        Base.metadata.create_all(engine)
+        logger.info("Database generated")
+    except sqlalchemy.exc.OperationalError:
+        logger.error("Incorrect mysql credentials!")
+        sys.exit(1)
+
+
 class ModelResult(Base):
     """
     create new table in AWS RDS
@@ -37,26 +57,6 @@ class ModelResult(Base):
 
     def __repr__(self):
         return f'<id: {self.id}, predicted_searched {self.predicted_searched}, actual_searched {self.predicted_searched}'
-
-
-def create_db(args):
-    """
-    create new table in AWS RDS
-
-    Args:
-        engine_string [string]: mysql connection engine string to create table at
-    Returns:
-        None
-    """
-
-    try:
-        logger.debug("Attempting to create database")
-        engine = sqlalchemy.create_engine(args.engine_string)
-        Base.metadata.create_all(engine)
-        logger.info("Database generated")
-    except sqlalchemy.exc.OperationalError:
-        logger.error("Incorrect mysql credentials!")
-        sys.exit(1)
 
 
 class ModelResultManager:
