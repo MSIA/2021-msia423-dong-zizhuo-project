@@ -25,7 +25,7 @@ if __name__ == '__main__':
     sb_upload = subparsers.add_parser("ingest", description="upload data to S3 buckets")
     sb_upload.add_argument('--local_path', required=False, help='local path of raw data', default=local_data_path)
     sb_upload.add_argument('--s3_path', required=False, help='path to store raw data on S3', default=s3_data_path)
-    sb_upload.set_defaults(func=load_data.upload_file_to_s3)
+    sb_upload.set_defaults(func=load_data.upload_data_to_s3)
 
     # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create_db", description="create database")
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     sp_used = args.subparser
     if sp_used == 'ingest':
-        load_data.upload_file_to_s3(args)
+        load_data.upload_data_to_s3(args)
     elif sp_used == 'create_db':
         gen_db.create_db(args)
     elif sp_used == 'run_model':

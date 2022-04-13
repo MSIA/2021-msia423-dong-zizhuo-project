@@ -285,15 +285,24 @@ docker run -it
 `config/flaskconfig.py` holds the configurations for the Flask app. It includes the following configurations:
 
 ```python
-DEBUG = True  # Keep True for debugging, change to False when moving to production 
-LOGGING_CONFIG = "config/logging/local.conf"  # Path to file that configures Python logger
-HOST = "0.0.0.0" # the host that is running the app. 0.0.0.0 when running locally 
-PORT = 5000  # What port to expose app on. Must be the same as the port exposed in app/Dockerfile 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data/sqf-15.db'  # URI (engine string) for database that contains tracks
+import os
+DEBUG = True
+LOGGING_CONFIG = "config/logging/local.conf"
+PORT = 5000
 APP_NAME = "searchfrisk"
-SQLALCHEMY_TRACK_MODIFICATIONS = True 
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+HOST = "0.0.0.0"
 SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
-MAX_ROWS_SHOW = 100 # Limits the number of rows returned from the database 
+MAX_ROWS_SHOW = 100
+
+# Connection string
+DB_HOST = os.environ.get('MYSQL_HOST')
+DB_PORT = os.environ.get('MYSQL_PORT')
+DB_USER = os.environ.get('MYSQL_USER')
+DB_PW = os.environ.get('MYSQL_PASSWORD')
+DATABASE = os.environ.get('DATABASE_NAME')
+DB_DIALECT = 'mysql+pymysql'
+SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 ```
 
 ### 3. Run the Flask app 
